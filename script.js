@@ -1,0 +1,314 @@
+document.addEventListener("DOMContentLoaded", () => {
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('is-visible');
+        // Unobserve after it appears once to avoid re-triggering
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.15 });
+
+  document.querySelectorAll('.animate-on-scroll').forEach(el => {
+    observer.observe(el);
+  });
+
+  const mobileToggle = document.getElementById('mobile-toggle');
+  const navElement = document.querySelector('.nav');
+
+  if (mobileToggle && navElement) {
+    mobileToggle.addEventListener('click', () => {
+      mobileToggle.classList.toggle('is-active');
+      navElement.classList.toggle('menu-open');
+    });
+  }
+
+  // Smooth scroll for nav links
+  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+      e.preventDefault();
+      const hrefAttr = this.getAttribute('href');
+      
+      // If href is just "#", scroll gracefully to the very top
+      if (hrefAttr === '#') {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        // Close menu if it's open
+        if (mobileToggle && navElement) {
+          mobileToggle.classList.remove('is-active');
+          navElement.classList.remove('menu-open');
+        }
+        return;
+      }
+      
+      const target = document.querySelector(hrefAttr);
+      if(target) {
+        if (mobileToggle && navElement) {
+          mobileToggle.classList.remove('is-active');
+          navElement.classList.remove('menu-open');
+        }
+        const offset = 40; // Controls how far below the navbar the section lands (smaller = higher up)
+        const bodyRect = document.body.getBoundingClientRect().top;
+        const elementRect = target.getBoundingClientRect().top;
+        const elementPosition = elementRect - bodyRect;
+        const offsetPosition = elementPosition - offset;
+
+        window.scrollTo({
+          top: offsetPosition,
+          behavior: 'smooth'
+        });
+      }
+    });
+  });
+
+  // Title Scroll Observer to show Nav Logo
+  const formalTitle = document.querySelector('.formal-title');
+  const navLogo = document.getElementById('nav-logo');
+  
+  if (formalTitle && navLogo) {
+    const titleObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting && entry.boundingClientRect.top < 100) {
+          navLogo.classList.add('show');
+        } else {
+          navLogo.classList.remove('show');
+        }
+      });
+    }, { threshold: 0, rootMargin: "-80px 0px 0px 0px" });
+    
+    titleObserver.observe(formalTitle);
+  }
+
+  // Apple-style Hero Scroll Animation
+  // Title resists scrolling past the nav divider, then fades away
+  const parallaxWrapper = document.getElementById('parallax-wrapper');
+  const heroSection = document.querySelector('.hero');
+  
+  if (parallaxWrapper && heroSection) {
+    // The nav bar bottom edge acts as the "divider" the title resists
+    const NAV_HEIGHT = 80; // approximate nav height in px
+    let ticking = false;
+    
+    const updateHeroOnScroll = () => {
+      const scrollY = window.scrollY;
+      const viewportHeight = window.innerHeight;
+      
+      // The title's natural center position from top of page
+      const titleNaturalTop = viewportHeight * 0.5;
+      
+      // Phase 1: Resistance zone (0 → titleNaturalTop - NAV_HEIGHT)
+      // The title tries to stay in place; it moves up very slowly (5% of scroll)
+      // This creates the "stuck / struggling to go past the divider" feel.
+      
+      // Phase 2: Fade-out zone (after the title reaches near the nav line)
+      // The title rapidly fades, scales down, blurs out — Apple dissolve style
+      
+      const resistanceEnd = titleNaturalTop - NAV_HEIGHT - 60; // where title would hit the nav area
+      const fadeZoneLength = 200; // how many px of scroll to fully disappear
+
+      if (scrollY <= 0) {
+        // Reset
+        parallaxWrapper.style.transform = 'translate3d(0, 0, 0) scale(1)';
+        parallaxWrapper.style.opacity = '1';
+        parallaxWrapper.style.filter = 'blur(0px)';
+        ticking = false;
+        return;
+      }
+      
+      if (scrollY < resistanceEnd) {
+        // ---- RESISTANCE PHASE ----
+        // Ease-out curve: the more you scroll, the harder it resists
+        const progress = scrollY / resistanceEnd; // 0 → 1
+        // Deceleration curve — starts moving, then slows down dramatically
+        const easedProgress = 1 - Math.pow(1 - progress, 3); // cubic ease-out
+        
+        // Max upward movement is capped — title barely moves
+        const maxTranslate = resistanceEnd * 0.12;
+        const translateY = -(easedProgress * maxTranslate);
+        
+        // Slight scale pulse as it resists (feels alive)
+        const scale = 1 - (easedProgress * 0.03);
+        
+        // Very subtle opacity reduction to hint it will disappear
+        const opacity = 1 - (easedProgress * 0.15);
+        
+        parallaxWrapper.style.transform = `translate3d(0, ${translateY}px, 0) scale(${scale})`;
+        parallaxWrapper.style.opacity = opacity;
+        parallaxWrapper.style.filter = 'blur(0px)';
+        
+      } else {
+        // ---- FADE & DISSOLVE PHASE ----
+        const fadeProgress = Math.min((scrollY - resistanceEnd) / fadeZoneLength, 1);
+        // Smoother cubic ease out for the dissolve phase (Apple-like)
+        const easedFade = 1 - Math.pow(1 - fadeProgress, 3);
+        
+        // Continue from where resistance ended
+        const baseTranslate = resistanceEnd * 0.12;
+        // Float upwards gracefully into the frosted glass
+        const extraTranslate = easedFade * 80;
+        const translateY = -(baseTranslate + extraTranslate);
+        
+        // Scale shrinks gently
+        const scale = (1 - 0.03) - (easedFade * 0.12);
+        
+        // Opacity drops on a slight curve
+        const opacity = (1 - 0.15) * (1 - Math.pow(fadeProgress, 2));
+        
+        // Progressive liquid blur — cinematic dissolve
+        const blur = Math.pow(fadeProgress, 2) * 20; // more blur at the end
+        
+        parallaxWrapper.style.transform = `translate3d(0, ${translateY}px, 0) scale(${Math.max(scale, 0.85)})`;
+        parallaxWrapper.style.opacity = Math.max(0, opacity);
+        parallaxWrapper.style.filter = `blur(${blur}px)`;
+      }
+      
+      ticking = false;
+    };
+    
+    window.addEventListener('scroll', () => {
+      if (!ticking) {
+        requestAnimationFrame(updateHeroOnScroll);
+        ticking = true;
+      }
+    }, { passive: true });
+  }
+
+  // --- Mobile Scroll Darken Effect ---
+  // Darkens the hero banner as you scroll down for an underwater dive cinematic feel
+  const heroBg = document.querySelector('.hero-bg');
+  if (heroBg) {
+    // Create a dedicated darken overlay that we can control directly
+    const darkenOverlay = document.createElement('div');
+    darkenOverlay.style.cssText = 'position:absolute;top:0;left:0;right:0;bottom:0;background:#010307;opacity:0;transition:opacity 0.15s ease-out;z-index:0;pointer-events:none;';
+    heroBg.insertBefore(darkenOverlay, heroBg.firstChild);
+
+    let darkenTicking = false;
+    window.addEventListener('scroll', () => {
+      if (!darkenTicking) {
+        requestAnimationFrame(() => {
+          const scrollY = window.scrollY;
+          const viewportHeight = window.innerHeight;
+          // Progressively dives from 0 to 0.75 opacity over the hero scroll
+          let darkenVal = (scrollY / (viewportHeight * 0.8)) * 0.75;
+          darkenVal = Math.min(Math.max(darkenVal, 0), 0.75);
+          darkenOverlay.style.opacity = darkenVal.toFixed(3);
+          darkenTicking = false;
+        });
+        darkenTicking = true;
+      }
+    }, { passive: true });
+  }
+
+  // --- Removed Stacked Cards Slider Logic ---
+
+  // --- TR/EN Language Toggling Logic ---
+  const langBtns = document.querySelectorAll('.lang-switcher a');
+  const langTexts = document.querySelectorAll('.lang-text');
+
+  if (langBtns.length > 0) {
+    langBtns.forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        
+        // Remove active class from all
+        langBtns.forEach(b => b.classList.remove('active'));
+        // Add active class to clicked
+        btn.classList.add('active');
+        
+        const selectedLang = btn.textContent.toLowerCase().trim(); // 'tr' or 'en'
+        
+        langTexts.forEach(el => {
+          if (el.dataset[selectedLang]) {
+            el.innerHTML = el.dataset[selectedLang];
+          }
+        });
+        
+        document.documentElement.lang = selectedLang;
+      });
+    });
+  }
+
+  // ============================================================
+  // ARTISTIC TOUCHES — JS Features (labeled TOUCH #N)
+  // Desktop-only effects are skipped on touch devices for performance
+  // ============================================================
+  const isTouchDevice = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
+
+  if (!isTouchDevice) {
+    // --- TOUCH #2: Cursor Glow Tracking ---
+    // TO REMOVE: Delete this block + remove #cursor-glow from HTML + CSS.
+    const cursorGlow = document.getElementById('cursor-glow');
+    if (cursorGlow) {
+      let glowX = 0, glowY = 0, currentX = 0, currentY = 0;
+      
+      document.addEventListener('mousemove', (e) => {
+        glowX = e.clientX;
+        glowY = e.clientY;
+      }, { passive: true });
+      
+      // Smooth lerp follow (slightly delayed, organic feel)
+      const updateGlow = () => {
+        currentX += (glowX - currentX) * 0.12;
+        currentY += (glowY - currentY) * 0.12;
+        cursorGlow.style.left = currentX + 'px';
+        cursorGlow.style.top = currentY + 'px';
+        requestAnimationFrame(updateGlow);
+      };
+      requestAnimationFrame(updateGlow);
+    }
+
+    // --- TOUCH #6: Magnetic Button Effect ---
+    // TO REMOVE: Delete this block + CSS TOUCH #6.
+    document.querySelectorAll('.btn-primary, .btn-ghost').forEach(btn => {
+      btn.addEventListener('mousemove', (e) => {
+        const rect = btn.getBoundingClientRect();
+        const x = e.clientX - rect.left - rect.width / 2;
+        const y = e.clientY - rect.top - rect.height / 2;
+        // Move button slightly toward cursor (max ~6px)
+        btn.style.transform = `translate(${x * 0.15}px, ${y * 0.25}px)`;
+      });
+      
+      btn.addEventListener('mouseleave', () => {
+        btn.style.transform = '';
+      });
+    });
+  }
+
+  // --- TOUCH #8: Mobile Orb Scroll Spring (Apple-style Parallax) ---
+  // Make the glass orb stubbornly stick under the header, then snap upwards.
+  const bioOrbContainer = document.querySelector('.bio-visual');
+  const glassOrb = document.querySelector('.glass-orb-wrapper');
+  
+  if (bioOrbContainer && glassOrb) {
+    window.addEventListener('scroll', () => {
+      if (window.innerWidth > 768) {
+        glassOrb.style.transform = '';
+        glassOrb.style.opacity = '';
+        return;
+      }
+
+      const rect = bioOrbContainer.getBoundingClientRect();
+      // The nav bar is ~70px. Tension starts when container reaches the nav.
+      const scrollPast = 70 - rect.top;
+
+      if (scrollPast > 0 && rect.bottom > 0) {
+        if (scrollPast < 180) {
+           // Resist entering standard scroll, push it down by 85% of what it scrolled up (tucks in)
+           const tension = scrollPast * 0.85; 
+           const scale = 1 - (scrollPast * 0.0005); // Bulge/squish tension
+           glassOrb.style.transform = `translateY(${tension}px) scale(${scale})`;
+           glassOrb.style.opacity = '1';
+        } else {
+           // Snap off! Subtracting exponentially to shoot upward.
+           const excess = scrollPast - 180;
+           const snapY = (180 * 0.85) - Math.pow(excess, 1.35); // Shoot up fast
+           glassOrb.style.transform = `translateY(${snapY}px) scale(0.85)`;
+           glassOrb.style.opacity = Math.max(0, 1 - (excess / 50));
+        }
+      } else {
+        glassOrb.style.transform = '';
+        glassOrb.style.opacity = '';
+      }
+    }, { passive: true });
+  }
+
+});

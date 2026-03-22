@@ -1,0 +1,1476 @@
+:root {
+  /* Colors - Deep Atmospheric Blue/Black */
+  --color-bg: #000000;
+  /* Pure black — seamless with hero fade */
+  --color-surface: rgba(10, 25, 47, 0.4);
+  --color-surface-hover: rgba(10, 25, 47, 0.6);
+  --color-primary: #38bdf8;
+  --color-primary-hover: #0ea5e9;
+  --color-accent: #818cf8;
+
+  --color-text-primary: #f8fafc;
+  --color-text-secondary: #94a3b8;
+  --color-border: rgba(56, 189, 248, 0.15);
+
+  /* Spacing */
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 32px;
+  --space-2xl: 48px;
+  --space-3xl: 64px;
+  --space-4xl: 96px;
+  --space-5xl: 128px;
+
+  /* Border Radius */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+  --radius-full: 9999px;
+
+  /* Typography */
+  --font-formal: 'Outfit', sans-serif;
+  --font-body: 'Outfit', sans-serif;
+
+  /* Shadows */
+  --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 12px 24px rgba(0, 0, 0, 0.5);
+  --shadow-lg: 0 24px 48px rgba(0, 0, 0, 0.6), 0 0 40px rgba(56, 189, 248, 0.1);
+  --shadow-glow: 0 0 30px rgba(56, 189, 248, 0.2);
+
+  /* Easing - Apple UI Spring feel */
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-spring: cubic-bezier(0.28, 0.84, 0.42, 1);
+  /* Apple-like slight spring */
+}
+
+/* Base Reset & Setup */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 150px;
+  /* Increased padding to safely frame the top of sections on mobile */
+}
+
+html,
+body {
+  background-color: var(--color-bg);
+}
+
+body {
+  font-family: var(--font-body);
+  color: var(--color-text-primary);
+  line-height: 1.6;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  /* iOS native scroll feel */
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-y: none;
+}
+
+/* iOS tap highlight removal */
+a,
+button {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Typography Fluid Sizes */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-body);
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+
+.formal-title {
+  font-family: var(--font-formal);
+  font-size: clamp(3.5rem, 8vw + 1rem, 7rem);
+  font-weight: 800;
+  letter-spacing: -0.05em;
+  margin-bottom: var(--space-md);
+  text-transform: uppercase;
+  /* Crystal clear sharp text, with subtle chromatic aberration shadow instead of blur */
+  color: rgba(255, 255, 255, 0.95);
+  text-shadow:
+    0 0 1px rgba(255, 255, 255, 0.8),  /* Immediate sharp white stroke to add thickness */
+    0 0 12px rgba(56, 189, 248, 0.4),  /* Ambient cyan glow matching the teal theme */
+    2px 0 0 rgba(255, 0, 0, 0.5),      /* Red channel shift */
+    -2px 0 0 rgba(0, 150, 255, 0.5);   /* Blue channel shift */
+}
+
+h2 {
+  font-size: clamp(2rem, 4vw + 0.5rem, 4rem);
+  margin-bottom: var(--space-lg);
+}
+
+h3 {
+  font-size: clamp(1.3rem, 2vw + 0.5rem, 2rem);
+  margin-bottom: var(--space-md);
+}
+
+p {
+  font-size: clamp(1rem, 1vw + 0.5rem, 1.125rem);
+  margin-bottom: var(--space-md);
+  color: var(--color-text-secondary);
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* Grids & Layout */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding-left: calc(var(--space-lg) + env(safe-area-inset-left));
+  padding-right: calc(var(--space-lg) + env(safe-area-inset-right));
+}
+
+.grid {
+  display: grid;
+  gap: var(--space-xl);
+}
+
+.grid-2 {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.grid-asymmetric {
+  grid-template-columns: 2fr 1fr;
+}
+
+@media (max-width: 768px) {
+
+  .grid-2,
+  .grid-asymmetric {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Background Atmosphere */
+.hero-bg {
+  position: relative;
+  background-color: var(--color-bg);
+  /* The artist banner image */
+  background-image: url('assets/images/banner.jpg?v=2');
+  background-size: cover;
+  background-position: center top;
+}
+
+.hero-bg::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(1, 3, 7, 0.2);
+  z-index: 0;
+}
+
+/* Soft cinematic gradient fade from hero image into the page — no sharp cut */
+.hero-bg .hero-fade-bottom {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 40vh;
+  background: linear-gradient(to top,
+      #000000 0%,
+      rgba(0, 0, 0, 0.85) 20%,
+      rgba(0, 0, 0, 0.4) 50%,
+      transparent 100%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Nav */
+.nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  padding-top: calc(var(--space-lg) + env(safe-area-inset-top));
+  padding-bottom: var(--space-lg);
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
+  /* Liquid Glass default */
+  backdrop-filter: blur(16px) saturate(1.2);
+  -webkit-backdrop-filter: blur(16px) saturate(1.2);
+  background: linear-gradient(to bottom, rgba(3, 6, 16, 0.5) 0%, rgba(3, 6, 16, 0.2) 100%);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  box-shadow: 0 1px 12px rgba(0, 0, 0, 0.1);
+  transition: all 0.4s var(--ease-spring);
+}
+
+.nav-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.nav-left {
+  display: flex;
+  align-items: center;
+}
+
+.nav-logo {
+  font-family: var(--font-formal);
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: rgba(255, 255, 255, 0.95);
+  opacity: 0;
+  transform: translateX(-20px);
+  transition: all 0.5s var(--ease-out-expo);
+  pointer-events: none;
+  white-space: nowrap;
+
+  /* Matches exactly the .formal-title aesthetic but scaled down */
+  text-transform: uppercase;
+  letter-spacing: -0.05em;
+  text-shadow:
+    0 0 1px rgba(255, 255, 255, 0.8),
+    0 0 8px rgba(56, 189, 248, 0.3),
+    1.5px 0 0 rgba(255, 0, 0, 0.5),
+    -1.5px 0 0 rgba(0, 150, 255, 0.5);
+}
+
+.nav-logo.show {
+  opacity: 1;
+  transform: translateX(0) scale(1);
+  pointer-events: auto;
+  cursor: pointer;
+}
+
+.nav-logo.show:hover {
+  transform: translateX(0) scale(1.05);
+  text-shadow:
+    0 0 2px rgba(255, 255, 255, 1),
+    0 0 15px rgba(56, 189, 248, 0.6),
+    2px 0 0 rgba(255, 0, 0, 0.7),
+    -2px 0 0 rgba(0, 150, 255, 0.7);
+}
+
+.nav-logo.show:active {
+  transform: translateX(0) scale(0.95);
+}
+
+.mobile-menu-toggle {
+  display: none;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  width: 44px;
+  height: 44px;
+  position: relative;
+  z-index: 101;
+  outline: none;
+  transition: transform 0.3s var(--ease-spring);
+}
+
+.mobile-menu-toggle:active {
+  transform: scale(0.92);
+}
+
+.toggle-icon {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 26px;
+  height: 2px;
+  background: var(--color-text-primary);
+  border-radius: 2px;
+  box-shadow: 0 0 10px rgba(56, 189, 248, 0.4);
+  /* Underwater cinematic glow */
+  transition: all 0.4s var(--ease-spring);
+}
+
+.toggle-icon::before,
+.toggle-icon::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: var(--color-text-primary);
+  border-radius: 2px;
+  box-shadow: 0 0 10px rgba(56, 189, 248, 0.4);
+  transition: all 0.4s var(--ease-spring);
+}
+
+.toggle-icon::before {
+  transform: translateY(-8px);
+}
+
+.toggle-icon::after {
+  transform: translateY(8px);
+}
+
+.mobile-menu-toggle.is-active .toggle-icon {
+  background: transparent;
+  box-shadow: none;
+}
+
+.mobile-menu-toggle.is-active .toggle-icon::before {
+  transform: translateY(0) rotate(45deg);
+  background: var(--color-primary);
+  box-shadow: 0 0 15px rgba(56, 189, 248, 0.6);
+}
+
+.mobile-menu-toggle.is-active .toggle-icon::after {
+  transform: translateY(0) rotate(-45deg);
+  background: var(--color-primary);
+  box-shadow: 0 0 15px rgba(56, 189, 248, 0.6);
+}
+
+.nav-menu {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2xl);
+}
+
+.lang-switcher {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  font-family: var(--font-formal);
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--color-text-secondary);
+  letter-spacing: 0.05em;
+}
+
+.lang-switcher a {
+  transition: color 0.3s ease;
+}
+
+.lang-switcher a:hover,
+.lang-switcher a.active {
+  color: var(--color-primary);
+}
+
+.separator {
+  opacity: 0.3;
+}
+
+.nav-links {
+  display: flex;
+  gap: var(--space-lg);
+  font-family: var(--font-formal);
+}
+
+.nav-links a {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--color-text-secondary);
+  transition: color 0.3s ease;
+}
+
+.nav-links a:hover {
+  color: var(--color-primary);
+}
+
+/* ============================================================
+   MOBILE RESPONSIVE — iOS Liquid Glass Optimization
+   ============================================================ */
+@media (max-width: 768px) {
+
+  /* --- Nav: hide desktop links on mobile, show styling like an Apple widget --- */
+  .nav.menu-open {
+    background: rgba(10, 15, 26, 0.75);
+    backdrop-filter: blur(32px) saturate(1.5);
+    -webkit-backdrop-filter: blur(32px) saturate(1.5);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .mobile-menu-toggle {
+    display: block;
+  }
+
+  .nav-menu {
+    width: 100%;
+    max-height: 0;
+    overflow: hidden;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-lg);
+    opacity: 0;
+    transform: translateY(-10px);
+    transition: max-height 0.5s var(--ease-spring), opacity 0.4s ease, transform 0.4s var(--ease-spring), padding 0.4s ease;
+  }
+
+  .nav.menu-open .nav-menu {
+    max-height: 500px;
+    opacity: 1;
+    transform: translateY(0);
+    padding-top: var(--space-xl);
+    padding-bottom: var(--space-md);
+  }
+
+  .nav-links {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: var(--space-md);
+  }
+
+  .nav-links a {
+    display: block;
+    font-size: 1.1rem;
+    padding: var(--space-xs) 0;
+  }
+
+  .lang-switcher {
+    padding-bottom: var(--space-md);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    width: 100%;
+  }
+
+  /* --- Sleeker Under-Water Top Bar (Decreased Padding) --- */
+  .nav {
+    padding-top: calc(var(--space-sm) + env(safe-area-inset-top));
+    padding-bottom: var(--space-sm);
+  }
+
+  /* --- Fixing "Hypatia Hertz" prominently at the top --- */
+  .nav-logo {
+    font-size: 1.25rem;
+    opacity: 1 !important;
+    /* Force visibility */
+    transform: none !important;
+    pointer-events: auto !important;
+    /* Inherit the chromatic text-shadow from the desktop class, just augment the glow slightly */
+    text-shadow:
+      0 0 1px rgba(255, 255, 255, 0.8),
+      0 0 15px rgba(56, 189, 248, 0.5),
+      1.5px 0 0 rgba(255, 0, 0, 0.5),
+      -1.5px 0 0 rgba(0, 150, 255, 0.5) !important;
+  }
+
+  /* --- Hide large hero title on mobile so it doesn't double-up --- */
+  .formal-title {
+    display: none;
+  }
+
+  /* --- Hero: Tighter spacing for mobile because title is gone --- */
+  .hero {
+    min-height: 80svh;
+    padding-top: var(--space-5xl);
+    padding-bottom: var(--space-3xl);
+  }
+
+  .subtitle {
+    font-size: 1rem;
+    margin-bottom: var(--space-lg);
+  }
+
+  /* --- Buttons: touch-friendly sizing --- */
+  .hero-actions {
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-sm);
+  }
+
+  .btn-primary,
+  .btn-ghost {
+    width: 100%;
+    max-width: 300px;
+    justify-content: center;
+    padding: 14px 28px;
+    font-size: 0.9rem;
+    /* iOS Liquid Glass: subtle inner light on buttons */
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  }
+
+  .btn-ghost {
+    background: rgba(255, 255, 255, 0.04);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+
+  /* --- Sections: reduced spacing and single-page fit --- */
+  section {
+    padding: var(--space-3xl) 0;
+    min-height: 100svh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .live-section {
+    padding: var(--space-2xl) 0;
+  }
+
+  /* --- Cards: Liquid Glass style for mobile --- */
+  .card {
+    padding: var(--space-lg);
+    border-radius: calc(var(--radius-xl) + 4px);
+    /* softer corners */
+    /* Liquid Glass: increased translucency + stronger blur */
+    background: rgba(10, 25, 47, 0.15);
+    /* highly translucent */
+    backdrop-filter: blur(48px) saturate(1.6);
+    -webkit-backdrop-filter: blur(48px) saturate(1.6);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    /* Subtle inner highlight like iOS glass panels */
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.1),
+      inset 0 0 20px rgba(56, 189, 248, 0.03),
+      0 12px 40px rgba(0, 0, 0, 0.5);
+  }
+
+  .card:hover {
+    transform: none;
+    /* disable hover lift on touch */
+  }
+
+  /* --- Release section mobile (Optimized to prevent vertical overflow) --- */
+  .release-section {
+    padding: var(--space-xl) 0;
+    /* Reduced from 3xl */
+  }
+
+  .card.release-card {
+    padding: var(--space-md);
+    /* Tighter inner card padding */
+  }
+
+  .release-card .grid-2 {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+    /* Remove explicit grid gap, control with margins */
+  }
+
+  .release-info {
+    display: contents;
+    /* Remove wrapper to let children join the flex column */
+  }
+
+  .release-info .label {
+    order: 1;
+    text-align: center;
+    margin-bottom: var(--space-xs);
+  }
+
+  .release-info h2 {
+    order: 2;
+    text-align: center;
+    margin-bottom: var(--space-md);
+    /* Reduced from space-lg */
+    font-size: 1.7rem;
+    /* Compress title to save height */
+  }
+
+  .release-info p {
+    display: none;
+    /* Hide album description exclusively on mobile */
+  }
+
+  .release-art {
+    order: 3;
+    width: 100%;
+    margin-bottom: var(--space-md);
+    /* Reduced from space-lg */
+  }
+
+  .platform-links {
+    order: 4;
+    justify-content: center;
+    width: 100%;
+    margin-top: 0;
+    gap: var(--space-sm);
+    /* Reduce gap between buttons */
+  }
+
+  .btn-platform {
+    padding: 10px 16px;
+    /* Slightly smaller button touch target */
+    font-size: 0.85rem;
+    font-weight: 700;
+    /* Liquid Glass: frosted platform buttons */
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(28px) saturate(1.3);
+    -webkit-backdrop-filter: blur(28px) saturate(1.3);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: var(--radius-full);
+    /* Apple pill shape */
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+
+  /* --- Bio section mobile --- */
+  .bio-section {
+    padding: var(--space-3xl) var(--space-md);
+  }
+
+  .bio-container {
+    gap: var(--space-lg);
+  }
+
+  .glass-orb {
+    width: 60%;
+    max-width: 200px;
+  }
+
+  /* --- Footer mobile --- */
+  .footer {
+    padding-top: var(--space-3xl);
+  }
+
+  .footer-email {
+    font-size: 1.1rem;
+    /* Break long email on small screens */
+    word-break: break-all;
+  }
+
+  .copyright {
+    margin-top: var(--space-2xl);
+  }
+
+  /* --- Labels: smaller on mobile --- */
+  .label {
+    font-size: 0.75rem;
+  }
+
+  /* --- Reduce heavy effects for mobile performance --- */
+  .film-grain {
+    opacity: 0.05;
+    /* Light cinematic grain for underwater feel */
+    mix-blend-mode: soft-light;
+  }
+
+  .cursor-glow {
+    display: none;
+    /* no mouse cursor on touch */
+  }
+
+  /* --- Section dividers: thinner on mobile --- */
+  .section-divider::after {
+    left: 20%;
+    right: 20%;
+  }
+
+  /* --- Deep Dark Cinematic Under-Water Nav Background --- */
+  .nav {
+    background: rgba(3, 5, 12, 0.5);
+    /* Deeper, sleeker underwater black/blue */
+    backdrop-filter: blur(24px) saturate(1.2);
+    -webkit-backdrop-filter: blur(24px) saturate(1.2);
+    border-bottom: 1px solid rgba(56, 189, 248, 0.1);
+    /* Subtle glowing edge */
+    /* Deep water drop shadow */
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+  }
+}
+
+/* Extra small devices (iPhone SE, etc.) */
+@media (max-width: 375px) {
+  .formal-title {
+    font-size: 2rem;
+  }
+
+  .container {
+    padding-left: calc(var(--space-md) + env(safe-area-inset-left));
+    padding-right: calc(var(--space-md) + env(safe-area-inset-right));
+  }
+
+  .btn-primary,
+  .btn-ghost {
+    padding: 12px 24px;
+    font-size: 0.85rem;
+  }
+
+  .card {
+    padding: var(--space-md);
+  }
+
+  h2 {
+    font-size: clamp(1.5rem, 5vw, 2rem);
+  }
+}
+
+/* Hero Section */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-top: var(--space-5xl);
+  padding-bottom: var(--space-4xl);
+  position: relative;
+}
+
+/* Hero divider is replaced by the soft gradient in .hero-fade-bottom */
+
+#parallax-wrapper {
+  will-change: transform, opacity, filter;
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+}
+
+.hero-container {
+  position: relative;
+  z-index: 2;
+  /* Above the gradient fade layers */
+  text-align: center;
+  width: 100%;
+}
+
+.hero-content {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.subtitle {
+  font-family: var(--font-formal);
+  font-size: clamp(1.125rem, 2vw, 1.5rem);
+  color: var(--color-primary);
+  margin-bottom: var(--space-xl);
+  opacity: 0.9;
+}
+
+.hero-actions {
+  display: flex;
+  gap: var(--space-md);
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+/* Base Buttons */
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 16px 32px;
+  font-family: var(--font-formal);
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: var(--color-bg);
+  background: var(--color-primary);
+  border: none;
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  transition: all 0.3s var(--ease-out-expo);
+  text-transform: uppercase;
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  background: var(--color-primary-hover);
+  box-shadow: var(--shadow-glow);
+}
+
+.btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  padding: 16px 32px;
+  font-family: var(--font-formal);
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--color-text-primary);
+  background: transparent;
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-ghost:hover {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+  background: rgba(56, 189, 248, 0.05);
+}
+
+/* Sections — subtle dark cinematic underwater tint instead of pitch black */
+section {
+  padding: var(--space-5xl) 0;
+  background: linear-gradient(to bottom,
+      rgba(2, 5, 14, 0.95) 0%,
+      rgba(4, 10, 22, 0.6) 50%,
+      rgba(2, 5, 14, 0.95) 100%);
+}
+
+/* Release section: pure black at top, underwater color gradually revealed */
+.release-section {
+  background: linear-gradient(to bottom,
+      #000000 0%,
+      #000000 10%,
+      #020510 30%,
+      #040c1c 60%,
+      #061024 100%) !important;
+}
+
+.live-section {
+  padding: var(--space-3xl) 0;
+}
+
+/* Card & Release */
+.card {
+  background: var(--color-surface);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  padding: var(--space-2xl);
+  transition: all 0.4s var(--ease-out-expo);
+  box-shadow: var(--shadow-md);
+}
+
+.card:hover {
+  transform: translateY(-8px);
+  box-shadow: var(--shadow-glow);
+  border-color: rgba(56, 189, 248, 0.4);
+}
+
+.label {
+  display: inline-block;
+  font-family: var(--font-formal);
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: var(--color-accent);
+  margin-bottom: var(--space-md);
+  text-transform: uppercase;
+}
+
+.platform-links {
+  display: flex;
+  gap: var(--space-sm);
+  margin-top: var(--space-lg);
+  flex-wrap: wrap;
+}
+
+.btn-platform {
+  font-family: var(--font-formal);
+  padding: 12px 24px;
+  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--color-text-primary);
+  font-weight: 600;
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+}
+
+.btn-platform:hover {
+  background: rgba(255, 255, 255, 0.1);
+  transform: translateY(-2px);
+}
+
+.btn-spotify:hover {
+  border-color: #1DB954;
+  color: #1DB954;
+}
+
+.btn-apple:hover {
+  border-color: #FA243C;
+  color: #FA243C;
+}
+
+.btn-youtube:hover {
+  border-color: #FF0000;
+  color: #FF0000;
+}
+
+/* Centered Player Layout */
+.player-container {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.player-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: var(--space-2xl) var(--space-xl);
+  text-align: center;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+}
+
+.player-art-wrapper {
+  width: 90%;
+  max-width: 480px;
+  aspect-ratio: 1;
+  margin: 0 auto var(--space-2xl) auto;
+  border-radius: var(--radius-lg);
+  box-shadow: 0 40px 80px rgba(0, 0, 0, 0.7), 0 0 50px rgba(56, 189, 248, 0.1);
+  overflow: hidden;
+  transition: transform 0.5s var(--ease-spring);
+}
+
+.player-art-wrapper:hover {
+  transform: translateY(-8px);
+}
+
+.player-cover {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.player-info {
+  margin-bottom: var(--space-2xl);
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.player-title {
+  font-family: var(--font-formal);
+  font-size: 3rem;
+  font-weight: 700;
+  margin: 0 0 var(--space-xs) 0;
+  color: var(--color-text-primary);
+  letter-spacing: -0.02em;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+}
+
+.player-artist {
+  font-family: var(--font-formal);
+  font-size: 1.1rem;
+  color: rgba(255, 255, 255, 0.7);
+  text-transform: uppercase;
+  letter-spacing: 0.25em;
+  margin: 0;
+}
+
+.player-platforms {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-md);
+  width: 100%;
+  max-width: 440px;
+  margin: 0 auto;
+}
+
+.btn-platform {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 52px;
+  font-size: 1rem;
+  font-weight: 600;
+  font-family: var(--font-body);
+  border-radius: var(--radius-full);
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--color-text-primary);
+  transition: all 0.3s var(--ease-out-expo);
+}
+
+.btn-platform:hover {
+  background: rgba(255, 255, 255, 0.1);
+  transform: translateY(-2px);
+}
+
+.btn-platform:active {
+  transform: translateY(0) scale(0.98);
+}
+
+.btn-spotify:hover {
+  border-color: #1DB954;
+  color: #1DB954;
+}
+
+.btn-apple:hover {
+  border-color: #FA243C;
+  color: #FA243C;
+}
+
+.btn-youtube:hover {
+  border-color: #FF0000;
+  color: #FF0000;
+}
+
+.btn-deezer:hover {
+  border-color: #FEAA2D;
+  color: #FEAA2D;
+}
+
+/* Bio Section */
+.bio-section {
+  background: linear-gradient(to bottom, transparent, rgba(14, 165, 233, 0.03));
+  padding: var(--space-5xl) var(--space-lg);
+}
+
+.glass-orb {
+  width: 80%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  margin: auto;
+  background: radial-gradient(circle at 30% 30%, rgba(56, 189, 248, 0.3), transparent 70%);
+  box-shadow: inset 0 0 40px rgba(129, 140, 248, 0.2), 0 0 60px rgba(56, 189, 248, 0.1);
+  filter: blur(10px);
+  animation: float 8s ease-in-out infinite alternate;
+}
+
+@keyframes float {
+  0% {
+    transform: translateY(0) scale(1);
+  }
+
+  100% {
+    transform: translateY(-30px) scale(1.05);
+  }
+}
+
+/* Footer */
+.footer {
+  background: #02040a;
+  padding-top: var(--space-4xl);
+  padding-bottom: calc(var(--space-xl) + env(safe-area-inset-bottom));
+  padding-left: calc(var(--space-lg) + env(safe-area-inset-left));
+  padding-right: calc(var(--space-lg) + env(safe-area-inset-right));
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  text-align: center;
+}
+
+.footer h3 {
+  font-family: var(--font-formal);
+  font-size: 1.25rem;
+  margin-bottom: var(--space-md);
+  color: var(--color-primary);
+}
+
+.footer-email {
+  font-family: var(--font-formal);
+  display: inline-block;
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-top: var(--space-sm);
+  color: var(--color-text-primary);
+  border-bottom: 2px solid transparent;
+  transition: all 0.3s ease;
+}
+
+.footer-email:hover {
+  color: var(--color-primary);
+  border-color: var(--color-primary);
+}
+
+.copyright {
+  margin-top: var(--space-4xl);
+  padding-top: var(--space-lg);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  font-size: 0.9rem;
+}
+
+/* Animations */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-on-scroll {
+  opacity: 0;
+  will-change: transform, opacity;
+}
+
+.animate-on-scroll.is-visible {
+  animation: fadeInUp 0.8s var(--ease-out-expo) forwards;
+}
+
+.stagger-1 {
+  animation-delay: 0.1s;
+}
+
+.stagger-2 {
+  animation-delay: 0.2s;
+}
+
+.stagger-3 {
+  animation-delay: 0.3s;
+}
+
+/* ============================================================
+   ARTISTIC TOUCHES — Each labeled TOUCH #N for easy revert
+   ============================================================ */
+
+/* --- TOUCH #1: Animated Film Grain Overlay ---
+   Adds a subtle, animated noise texture over the entire page
+   for an analog/cinematic atmosphere.
+   TO REMOVE: Delete this entire TOUCH #1 block.
+*/
+.film-grain {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 9999;
+  pointer-events: none;
+  opacity: 0.035;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  background-size: 128px 128px;
+  animation: grainShift 0.5s steps(4) infinite;
+  mix-blend-mode: overlay;
+}
+
+@keyframes grainShift {
+  0% {
+    transform: translate(0, 0);
+  }
+
+  25% {
+    transform: translate(-2px, 3px);
+  }
+
+  50% {
+    transform: translate(3px, -1px);
+  }
+
+  75% {
+    transform: translate(-1px, -3px);
+  }
+
+  100% {
+    transform: translate(2px, 1px);
+  }
+}
+
+/* --- TOUCH #2: Custom Cursor Glow ---
+   A soft radial glow follows the mouse cursor,
+   creating a "flashlight in the dark" feel.
+   TO REMOVE: Delete this TOUCH #2 block + remove #cursor-glow from HTML.
+*/
+.cursor-glow {
+  position: fixed;
+  width: 400px;
+  height: 400px;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9998;
+  background: radial-gradient(circle,
+      rgba(56, 189, 248, 0.06) 0%,
+      rgba(129, 140, 248, 0.03) 40%,
+      transparent 70%);
+  transform: translate(-50%, -50%);
+  transition: opacity 0.3s ease;
+  will-change: left, top;
+}
+
+/* --- TOUCH #3: Glowing Section Dividers ---
+   Adds luminous gradient lines between major sections.
+   TO REMOVE: Delete this TOUCH #3 block + remove .section-divider elements from HTML.
+*/
+.section-divider {
+  width: 100%;
+  height: 1px;
+  border: none;
+  background: linear-gradient(90deg,
+      transparent 0%,
+      rgba(56, 189, 248, 0.08) 15%,
+      rgba(129, 140, 248, 0.25) 50%,
+      rgba(56, 189, 248, 0.08) 85%,
+      transparent 100%);
+  position: relative;
+}
+
+.section-divider::after {
+  content: '';
+  position: absolute;
+  top: -4px;
+  left: 30%;
+  right: 30%;
+  height: 9px;
+  background: radial-gradient(ellipse at center,
+      rgba(129, 140, 248, 0.15) 0%,
+      transparent 70%);
+  filter: blur(3px);
+}
+
+/* --- TOUCH #4: Nav Link Animated Underline ---
+   Elegant line that slides in from left on hover.
+   TO REMOVE: Delete this TOUCH #4 block.
+*/
+.nav-links a {
+  position: relative;
+  overflow: hidden;
+}
+
+.nav-links a::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 100%;
+  height: 1.5px;
+  background: linear-gradient(90deg, var(--color-primary), var(--color-accent));
+  transform: translateX(-105%);
+  transition: transform 0.4s var(--ease-out-expo);
+}
+
+.nav-links a:hover::after {
+  transform: translateX(0);
+}
+
+/* --- TOUCH #5: Ambient Breathing Glow on Hero ---
+   A soft, pulsing radial light at the bottom of the hero,
+   like a living organism breathing in the dark.
+   TO REMOVE: Delete this TOUCH #5 block.
+*/
+.hero-bg .hero-breathing-glow {
+  position: absolute;
+  bottom: -60px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 70%;
+  height: 200px;
+  background: radial-gradient(ellipse at center,
+      rgba(56, 189, 248, 0.12) 0%,
+      rgba(129, 140, 248, 0.06) 40%,
+      transparent 70%);
+  filter: blur(40px);
+  animation: breathe 6s ease-in-out infinite;
+  z-index: 0;
+  pointer-events: none;
+}
+
+@keyframes breathe {
+
+  0%,
+  100% {
+    opacity: 0.4;
+    transform: translateX(-50%) scale(1);
+  }
+
+  50% {
+    opacity: 0.8;
+    transform: translateX(-50%) scale(1.15);
+  }
+}
+
+/* --- TOUCH #6: Magnetic Button Micro-animation ---
+   Buttons slightly tilt/shift toward the cursor on hover,
+   giving a premium "magnetic" feel.
+   TO REMOVE: Delete this TOUCH #6 block + remove magnetic JS from script.js.
+*/
+.btn-primary,
+.btn-ghost,
+.btn-platform {
+  position: relative;
+  transition: all 0.35s var(--ease-out-expo);
+}
+
+.btn-primary:active,
+.btn-ghost:active {
+  transform: scale(0.96);
+}
+
+/* --- TOUCH #7: Shimmer Effect on Section Labels ---
+   The "YENİ ÇIKANLAR / RELEASES" style labels get a
+   subtle animated gradient shimmer.
+   TO REMOVE: Delete this TOUCH #7 block.
+*/
+.label {
+  background: linear-gradient(120deg,
+      var(--color-accent) 0%,
+      rgba(56, 189, 248, 0.8) 40%,
+      var(--color-accent) 60%,
+      rgba(200, 200, 255, 0.9) 80%,
+      var(--color-accent) 100%);
+  background-size: 300% 100%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: shimmer 6s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: 100% 50%;
+  }
+
+  50% {
+    background-position: 0% 50%;
+  }
+
+  100% {
+    background-position: 100% 50%;
+  }
+}
+
+/* --- TOUCH #8: Footer Aurora Gradient ---
+   Replaces the static footer top border with a living,
+   moving aurora-like gradient line.
+   TO REMOVE: Delete this TOUCH #8 block.
+*/
+.footer {
+  position: relative;
+  border-top: none !important;
+}
+
+.footer::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg,
+      transparent,
+      rgba(56, 189, 248, 0.5),
+      rgba(129, 140, 248, 0.6),
+      rgba(56, 189, 248, 0.4),
+      transparent);
+  background-size: 200% 100%;
+  animation: aurora 4s ease-in-out infinite;
+}
+
+@keyframes aurora {
+  0% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+/* Spotify-like Premium Desktop Layout for Player */
+@media (min-width: 769px) {
+  .player-container {
+    max-width: 1000px;
+  }
+
+  .player-card {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-3xl);
+    text-align: left;
+
+    /* Elegant Dark Glassmorphism Container */
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: var(--radius-xl);
+    padding: var(--space-2xl) var(--space-3xl);
+    box-shadow: inset 0 0 40px rgba(255, 255, 255, 0.01), 0 20px 40px rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(20px);
+  }
+
+  .player-left-col {
+    flex: 1;
+    display: flex;
+    flex-direction: row;
+    /* Horizontal layout for Cover and Info */
+    align-items: center;
+    gap: var(--space-2xl);
+  }
+
+  .player-art-wrapper {
+    max-width: 250px;
+    margin: 0;
+    flex-shrink: 0;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.8);
+  }
+
+  .player-info {
+    align-items: flex-start;
+    margin-bottom: 0;
+  }
+
+  .player-title {
+    font-size: 3.5rem;
+    /* Massive title */
+  }
+
+  .player-right-col {
+    flex: 0 0 240px;
+    display: flex;
+    align-items: center;
+    border-left: 1px solid rgba(255, 255, 255, 0.08);
+    /* Subtle separator */
+    padding-left: var(--space-2xl);
+  }
+
+  .player-platforms {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    margin: 0;
+    gap: var(--space-sm);
+  }
+
+  .btn-platform {
+    height: 48px;
+    background: transparent;
+    /* Cleaner platform buttons on desktop */
+  }
+}
+
+/* Responsive overrides for Centered Player */
+@media (max-width: 768px) {
+  html {
+    scroll-padding-top: 100px;
+  }
+
+  .player-card {
+    /* Compress paddings to save vertical screen space */
+    padding: var(--space-lg) var(--space-xs);
+  }
+
+  .player-art-wrapper {
+    width: 100%;
+    max-width: 280px;
+    /* Prevent huge cover stretching */
+    margin: 0 auto var(--space-lg) auto;
+  }
+
+  .player-title {
+    font-size: 2rem;
+  }
+
+  .player-info {
+    margin-bottom: var(--space-lg);
+  }
+
+  .player-platforms {
+    grid-template-columns: 1fr;
+    /* Switch to vertical stack for thumbs on mobile */
+    gap: var(--space-sm);
+    /* Reduce gap between buttons */
+  }
+
+  .btn-platform {
+    height: 48px;
+    /* Extremely ergonomic for thumbs while saving vertical space */
+  }
+}
