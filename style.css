@@ -106,10 +106,14 @@ h6 {
   /* Crystal clear sharp text, with subtle chromatic aberration shadow instead of blur */
   color: rgba(255, 255, 255, 0.95);
   text-shadow:
-    0 0 1px rgba(255, 255, 255, 0.8),  /* Immediate sharp white stroke to add thickness */
-    0 0 12px rgba(56, 189, 248, 0.4),  /* Ambient cyan glow matching the teal theme */
-    2px 0 0 rgba(255, 0, 0, 0.5),      /* Red channel shift */
-    -2px 0 0 rgba(0, 150, 255, 0.5);   /* Blue channel shift */
+    0 0 1px rgba(255, 255, 255, 0.8),
+    /* Immediate sharp white stroke to add thickness */
+    0 0 12px rgba(56, 189, 248, 0.4),
+    /* Ambient cyan glow matching the teal theme */
+    2px 0 0 rgba(255, 0, 0, 0.5),
+    /* Red channel shift */
+    -2px 0 0 rgba(0, 150, 255, 0.5);
+  /* Blue channel shift */
 }
 
 h2 {
@@ -595,7 +599,8 @@ a {
 
   .platform-links {
     order: 4;
-    justify-content: center;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
     width: 100%;
     margin-top: 0;
     gap: var(--space-sm);
@@ -604,6 +609,7 @@ a {
 
   .btn-platform {
     padding: 10px 16px;
+    text-align: center;
     /* Slightly smaller button touch target */
     font-size: 0.85rem;
     font-weight: 700;
@@ -722,7 +728,7 @@ a {
 /* Hero divider is replaced by the soft gradient in .hero-fade-bottom */
 
 #parallax-wrapper {
-  will-change: transform, opacity, filter;
+  will-change: transform, opacity;
   transform-style: preserve-3d;
   backface-visibility: hidden;
 }
@@ -854,15 +860,16 @@ section {
 }
 
 .platform-links {
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
   gap: var(--space-sm);
   margin-top: var(--space-lg);
-  flex-wrap: wrap;
 }
 
 .btn-platform {
   font-family: var(--font-formal);
   padding: 12px 24px;
+  text-align: center;
   border-radius: var(--radius-md);
   background: rgba(255, 255, 255, 0.05);
   border: 1px solid rgba(255, 255, 255, 0.1);
@@ -971,6 +978,7 @@ section {
   display: flex;
   align-items: center;
   justify-content: center;
+  text-align: center;
   height: 52px;
   font-size: 1rem;
   font-weight: 600;
@@ -1011,6 +1019,11 @@ section {
 .btn-deezer:hover {
   border-color: #FEAA2D;
   color: #FEAA2D;
+}
+
+.btn-ytmusic:hover {
+  border-color: #FF0000;
+  color: #FF0000;
 }
 
 /* Bio Section */

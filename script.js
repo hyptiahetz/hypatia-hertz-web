@@ -133,7 +133,7 @@ document.addEventListener("DOMContentLoaded", () => {
         
         parallaxWrapper.style.transform = `translate3d(0, ${translateY}px, 0) scale(${scale})`;
         parallaxWrapper.style.opacity = opacity;
-        parallaxWrapper.style.filter = 'blur(0px)';
+        // parallaxWrapper.style.filter = 'blur(0px)';
         
       } else {
         // ---- FADE & DISSOLVE PHASE ----
@@ -158,7 +158,7 @@ document.addEventListener("DOMContentLoaded", () => {
         
         parallaxWrapper.style.transform = `translate3d(0, ${translateY}px, 0) scale(${Math.max(scale, 0.85)})`;
         parallaxWrapper.style.opacity = Math.max(0, opacity);
-        parallaxWrapper.style.filter = `blur(${blur}px)`;
+        // parallaxWrapper.style.filter = `blur(${blur}px)`;
       }
       
       ticking = false;
