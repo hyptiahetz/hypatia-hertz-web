@@ -1491,3 +1491,123 @@ section {
     /* Extremely ergonomic for thumbs while saving vertical space */
   }
 }
+
+/* ============================================================
+   NEW AESTHETIC ADDITIONS
+   ============================================================ */
+
+/* --- Page Loader --- */
+.page-loader {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 99999;
+  background: #010307;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.6s ease, visibility 0.6s ease;
+}
+
+.page-loader.hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.loader-orb {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%,
+      rgba(56, 189, 248, 0.5),
+      rgba(129, 140, 248, 0.2) 60%,
+      transparent 80%);
+  box-shadow:
+    0 0 40px rgba(56, 189, 248, 0.3),
+    inset 0 0 20px rgba(129, 140, 248, 0.2);
+  animation: loaderBreathe 1.5s ease-in-out infinite;
+}
+
+@keyframes loaderBreathe {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.6;
+    box-shadow: 0 0 30px rgba(56, 189, 248, 0.2),
+                inset 0 0 15px rgba(129, 140, 248, 0.15);
+  }
+  50% {
+    transform: scale(1.2);
+    opacity: 1;
+    box-shadow: 0 0 60px rgba(56, 189, 248, 0.4),
+                inset 0 0 30px rgba(129, 140, 248, 0.3);
+  }
+}
+
+/* --- Release Section Label --- */
+.player-container > .label {
+  display: block;
+  text-align: center;
+  margin-bottom: var(--space-lg);
+}
+
+/* --- Platform Button SVG Icons --- */
+.btn-platform svg {
+  flex-shrink: 0;
+  margin-right: 8px;
+  vertical-align: middle;
+}
+
+/* --- Stay Notified Button --- */
+.btn-notify {
+  display: inline-block;
+  margin-top: var(--space-lg);
+  padding: 12px 28px;
+  font-family: var(--font-formal);
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--color-primary);
+  border: 1px solid rgba(56, 189, 248, 0.3);
+  border-radius: var(--radius-full);
+  background: rgba(56, 189, 248, 0.05);
+  transition: all 0.3s var(--ease-out-expo);
+  letter-spacing: 0.02em;
+}
+
+.btn-notify:hover {
+  background: rgba(56, 189, 248, 0.12);
+  border-color: var(--color-primary);
+  transform: translateY(-2px);
+  box-shadow: 0 0 20px rgba(56, 189, 248, 0.15);
+}
+
+/* --- Social Media Icons --- */
+.social-links {
+  display: flex;
+  justify-content: center;
+  gap: var(--space-lg);
+  margin-top: var(--space-xl);
+}
+
+.social-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--color-text-secondary);
+  transition: all 0.3s var(--ease-out-expo);
+}
+
+.social-icon:hover {
+  color: var(--color-primary);
+  border-color: var(--color-primary);
+  background: rgba(56, 189, 248, 0.08);
+  transform: translateY(-3px);
+  box-shadow: 0 0 20px rgba(56, 189, 248, 0.2);
+}

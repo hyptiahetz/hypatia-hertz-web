@@ -1,4 +1,18 @@
 document.addEventListener("DOMContentLoaded", () => {
+  // --- Page Loader ---
+  const pageLoader = document.getElementById('page-loader');
+  if (pageLoader) {
+    window.addEventListener('load', () => {
+      setTimeout(() => {
+        pageLoader.classList.add('hidden');
+      }, 400);
+    });
+    // Fallback: hide after 3 seconds regardless
+    setTimeout(() => {
+      pageLoader.classList.add('hidden');
+    }, 3000);
+  }
+
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
