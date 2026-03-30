@@ -1563,7 +1563,9 @@ section {
 
 /* --- Stay Notified Button --- */
 .btn-notify {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
   margin-top: var(--space-lg);
   padding: 12px 28px;
   font-family: var(--font-formal);
