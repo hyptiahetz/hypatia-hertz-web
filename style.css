@@ -171,10 +171,10 @@ a {
   position: relative;
   background-color: var(--color-bg);
   /* The artist banner image */
-  background-image: url('assets/images/banner.webp');
+  background-image: url('assets/images/banner.webp?v=2');
   background-image: image-set(
-    url('assets/images/banner.webp') type('image/webp'),
-    url('assets/images/banner.jpg') type('image/jpeg')
+    url('assets/images/banner.webp?v=2') type('image/webp'),
+    url('assets/images/banner.jpg?v=2') type('image/jpeg')
   );
   background-size: cover;
   background-position: center top;
