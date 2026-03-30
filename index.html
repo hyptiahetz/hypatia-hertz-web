@@ -11,6 +11,21 @@
   <meta name="description"
     content="Hypatia Hertz'in resmi web sitesi. Atmosferik, elektronik ve melankolik müzik deneyimi.">
 
+  <!-- Favicon -->
+  <link rel="icon" type="image/x-icon" href="assets/images/favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/images/apple-touch-icon.png">
+
+  <!-- Open Graph / Social Sharing -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Hypatia Hertz | Atmospheric & Ambient Electronic">
+  <meta property="og:description" content="A sonic universe built with Turkish music in Istanbul. Listen to Eternal Drift now.">
+  <meta property="og:image" content="https://hypatia-hertz-web.vercel.app/assets/images/cover.jpg">
+  <meta property="og:url" content="https://hypatia-hertz-web.vercel.app">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Hypatia Hertz | Atmospheric & Ambient Electronic">
+  <meta name="twitter:description" content="A sonic universe built with Turkish music in Istanbul.">
+  <meta name="twitter:image" content="https://hypatia-hertz-web.vercel.app/assets/images/cover.jpg">
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap">
@@ -80,7 +95,10 @@
           
           <div class="player-left-col">
             <div class="player-art-wrapper">
-              <img src="assets/images/cover.jpg" alt="Eternal Drift" class="player-cover" onerror="this.src='https://images.unsplash.com/photo-1614613535308-eb5fbd3d2c17?q=80&w=800&auto=format&fit=crop';">
+              <picture>
+                <source srcset="assets/images/cover.jpg" type="image/jpeg">
+                <img src="assets/images/cover.jpg" alt="Eternal Drift" class="player-cover" loading="lazy">
+              </picture>
             </div>
             
             <div class="player-info">
