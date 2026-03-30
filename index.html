@@ -34,8 +34,8 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap">
   </noscript>
 
-  <link rel="stylesheet" href="style.css?v=11">
-  <script src="script.js?v=11" defer></script>
+  <link rel="stylesheet" href="style.css?v=12">
+  <script src="script.js?v=12" defer></script>
 </head>
 
 <body>
@@ -134,7 +134,7 @@
           <span class="label lang-text" data-en="LIVE" data-tr="KONSERLER / LIVE">LIVE</span>
           <h2 class="lang-text" data-en="Upcoming Events" data-tr="Yaklaşan Etkinlikler">Upcoming Events</h2>
           <p class="lang-text" data-en="There are no scheduled concerts yet. Stay tuned for future performances and ticket information." data-tr="Henüz planlanmış bir konser bulunmamaktadır. Gelecek performanslar ve bilet bilgileri için takipte kalın.">There are no scheduled concerts yet. Stay tuned for future performances and ticket information.</p>
-          <a href="mailto:info@hypatiahertz.com?subject=Stay%20Notified" class="btn-notify lang-text" data-en="✉ Stay Notified" data-tr="✉ Haberdar Ol">✉ Stay Notified</a>
+          <button type="button" id="btn-notify-open" class="btn-notify lang-text" data-en="✉ Stay Notified" data-tr="✉ Haberdar Ol">✉ Stay Notified</button>
         </div>
       </div>
     </section>
@@ -176,6 +176,35 @@
       <p class="lang-text" data-en="&copy; 2026 Hypatia Hertz. All rights reserved." data-tr="&copy; 2026 Hypatia Hertz. Tüm hakları saklıdır.">&copy; 2026 Hypatia Hertz. All rights reserved.</p>
     </div>
   </footer>
+
+  <!-- Email Subscription Modal -->
+  <div id="notify-modal" class="notify-modal" aria-hidden="true">
+    <div class="notify-modal-backdrop" id="notify-modal-backdrop"></div>
+    <div class="notify-modal-content">
+      <button type="button" class="notify-modal-close" id="notify-modal-close" aria-label="Close">&times;</button>
+      <div class="notify-modal-orb" aria-hidden="true"></div>
+      <h3 class="lang-text" data-en="Stay in the Frequency" data-tr="Frekansta Kal">Stay in the Frequency</h3>
+      <p class="lang-text" data-en="Get notified about new releases, concerts and exclusive content." data-tr="Yeni çıkanlar, konserler ve özel içeriklerden haberdar ol.">Get notified about new releases, concerts and exclusive content.</p>
+      <form id="notify-form" class="notify-form">
+        <input type="hidden" name="_subject" value="New Subscriber - Hypatia Hertz">
+        <input type="hidden" name="_captcha" value="false">
+        <input type="hidden" name="_template" value="table">
+        <div class="notify-input-group">
+          <input type="email" name="email" id="notify-email" required
+            class="notify-input" data-en-placeholder="your@email.com" data-tr-placeholder="email@adresiniz.com" placeholder="your@email.com">
+          <button type="submit" class="notify-submit lang-text" data-en="Subscribe" data-tr="Abone Ol">Subscribe</button>
+        </div>
+      </form>
+      <div id="notify-success" class="notify-success" style="display: none;">
+        <span class="notify-check">✓</span>
+        <p class="lang-text" data-en="You're in! We'll keep you in the loop." data-tr="Tamam! Seni bilgilendireceğiz.">You're in! We'll keep you in the loop.</p>
+      </div>
+      <div id="notify-error" class="notify-error" style="display: none;">
+        <p class="lang-text" data-en="Something went wrong. Please try again." data-tr="Bir hata oluştu. Lütfen tekrar deneyin.">Something went wrong. Please try again.</p>
+      </div>
+    </div>
+  </div>
+
 </body>
 
 </html>

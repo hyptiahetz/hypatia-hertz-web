@@ -325,4 +325,84 @@ document.addEventListener("DOMContentLoaded", () => {
     }, { passive: true });
   }
 
+  // --- Subscription Modal ---
+  const notifyModal = document.getElementById('notify-modal');
+  const btnOpen = document.getElementById('btn-notify-open');
+  const btnClose = document.getElementById('notify-modal-close');
+  const backdrop = document.getElementById('notify-modal-backdrop');
+  const notifyForm = document.getElementById('notify-form');
+  const notifyEmail = document.getElementById('notify-email');
+  const notifySuccess = document.getElementById('notify-success');
+  const notifyError = document.getElementById('notify-error');
+
+  function openModal() {
+    notifyModal.classList.add('active');
+    notifyModal.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+    setTimeout(() => notifyEmail.focus(), 400);
+    // Update placeholder based on current language
+    const currentLang = document.querySelector('.lang-switcher .active')?.textContent?.trim() === 'TR' ? 'tr' : 'en';
+    const phAttr = currentLang === 'tr' ? 'data-tr-placeholder' : 'data-en-placeholder';
+    if (notifyEmail.getAttribute(phAttr)) {
+      notifyEmail.placeholder = notifyEmail.getAttribute(phAttr);
+    }
+  }
+
+  function closeModal() {
+    notifyModal.classList.remove('active');
+    notifyModal.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+  }
+
+  if (btnOpen) btnOpen.addEventListener('click', openModal);
+  if (btnClose) btnClose.addEventListener('click', closeModal);
+  if (backdrop) backdrop.addEventListener('click', closeModal);
+
+  // Close on Escape key
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && notifyModal.classList.contains('active')) {
+      closeModal();
+    }
+  });
+
+  // Form submission via FormSubmit.co
+  if (notifyForm) {
+    notifyForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const email = notifyEmail.value.trim();
+      if (!email) return;
+
+      const submitBtn = notifyForm.querySelector('.notify-submit');
+      submitBtn.disabled = true;
+      submitBtn.textContent = '...';
+      notifyError.style.display = 'none';
+
+      try {
+        const response = await fetch('https://formsubmit.co/ajax/info@hypatiahertz.com', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          },
+          body: JSON.stringify({
+            email: email,
+            _subject: 'New Subscriber - Hypatia Hertz'
+          })
+        });
+
+        if (response.ok) {
+          notifyForm.style.display = 'none';
+          notifySuccess.style.display = 'block';
+        } else {
+          throw new Error('Submission failed');
+        }
+      } catch (err) {
+        notifyError.style.display = 'block';
+        submitBtn.disabled = false;
+        const currentLang = document.querySelector('.lang-switcher .active')?.textContent?.trim() === 'TR' ? 'tr' : 'en';
+        submitBtn.textContent = currentLang === 'tr' ? 'Abone Ol' : 'Subscribe';
+      }
+    });
+  }
+
 });
