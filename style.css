@@ -1554,6 +1554,12 @@ section {
   margin-bottom: var(--space-lg);
 }
 
+@media (max-width: 768px) {
+  .player-container > .label {
+    display: none;
+  }
+}
+
 /* --- Platform Button SVG Icons --- */
 .btn-platform svg {
   flex-shrink: 0;
