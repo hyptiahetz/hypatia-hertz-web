@@ -198,6 +198,7 @@ a {
   left: 0;
   right: 0;
   height: 40vh;
+  height: 40svh;
   background: linear-gradient(to top,
       #000000 0%,
       rgba(0, 0, 0, 0.85) 20%,
@@ -721,6 +722,7 @@ a {
 /* Hero Section */
 .hero {
   min-height: 100vh;
+  min-height: 100svh;
   display: flex;
   align-items: center;
   justify-content: center;

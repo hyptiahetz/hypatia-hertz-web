@@ -103,6 +103,15 @@ document.addEventListener("DOMContentLoaded", () => {
     let ticking = false;
     
     const updateHeroOnScroll = () => {
+      // Disable parallax completely on mobile devices to prevent scroll jitter/thrashing
+      // caused by the dynamic URL address bar resizing the viewport height
+      if (window.innerWidth <= 768) {
+        parallaxWrapper.style.transform = 'translate3d(0, 0, 0) scale(1)';
+        parallaxWrapper.style.opacity = '1';
+        ticking = false;
+        return;
+      }
+
       const scrollY = window.scrollY;
       const viewportHeight = window.innerHeight;
       
